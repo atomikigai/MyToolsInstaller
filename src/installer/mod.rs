@@ -3,6 +3,7 @@ use anyhow::Result;
 use crate::detect::distro;
 use crate::util::has;
 
+pub mod cargo_watch;
 pub mod docker;
 pub mod fd;
 pub mod fish;
@@ -36,6 +37,7 @@ pub enum Tool {
     TablePlus,
     Zoxide,
     Gh,
+    CargoWatch,
 }
 
 impl Tool {
@@ -56,13 +58,15 @@ impl Tool {
         Tool::TablePlus,
         Tool::Zoxide,
         Tool::Gh,
+        Tool::CargoWatch,
     ];
 
     /// Tools that must be installed before this one.
     pub fn deps(self) -> &'static [Tool] {
         match self {
-            Tool::Paru      => &[Tool::Rust],
-            Tool::TablePlus => &[Tool::Yay],
+            Tool::Paru       => &[Tool::Rust],
+            Tool::TablePlus  => &[Tool::Yay],
+            Tool::CargoWatch => &[Tool::Rust],
             _               => &[],
         }
     }
@@ -86,6 +90,7 @@ impl Tool {
             Tool::TablePlus => "table-plus", // ValueEnum kebab-cases "TablePlus"
             Tool::Zoxide    => "zoxide",
             Tool::Gh        => "gh",
+            Tool::CargoWatch => "cargo-watch",
         }
     }
 
@@ -119,6 +124,7 @@ impl Tool {
             Tool::TablePlus => "tableplus   — database GUI (AUR, needs yay or paru)",
             Tool::Zoxide    => "zoxide      — smarter cd",
             Tool::Gh        => "gh          — GitHub CLI (browser device-flow login)",
+            Tool::CargoWatch => "cargo-watch — watch & rerun cargo commands (needs rust)",
         }
     }
 
@@ -139,6 +145,7 @@ impl Tool {
             Tool::TablePlus => "tableplus",
             Tool::Zoxide    => "zoxide",
             Tool::Gh        => "gh",
+            Tool::CargoWatch => "cargo-watch",
         }
     }
 
@@ -158,6 +165,7 @@ impl Tool {
             Tool::Starship => &[".local/bin/starship"],
             Tool::Xh       => &[".local/bin/xh", ".cargo/bin/xh"],
             Tool::Zoxide   => &[".local/bin/zoxide", ".cargo/bin/zoxide"],
+            Tool::CargoWatch => &[".cargo/bin/cargo-watch"],
             _              => return false,
         };
         fallbacks.iter().any(|p| home.join(p).exists())
@@ -185,6 +193,7 @@ impl Tool {
             Tool::TablePlus => tableplus::install(d),
             Tool::Zoxide    => zoxide::install(),
             Tool::Gh        => gh::install(d),
+            Tool::CargoWatch => cargo_watch::install(),
         }
     }
 

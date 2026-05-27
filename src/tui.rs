@@ -1636,6 +1636,11 @@ fn tool_detail(tool: Tool) -> (&'static str, &'static str, Option<&'static str>)
             "Installs the GitHub CLI and signs you in via the OAuth device flow — shows a URL + code to open in your browser, then completes login automatically.",
             Some("attach the panel (F2) to read the URL and the one-time code"),
         ),
+        Tool::CargoWatch => (
+            "cargo-watch — Cargo Auto-Rerun",
+            "Watches your Rust project and re-runs `cargo check`/`run`/`test` on file changes. Installed via `cargo install`.",
+            Some("requires rust/cargo installed first"),
+        ),
     }
 }
 
