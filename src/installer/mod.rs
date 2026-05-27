@@ -14,6 +14,7 @@ pub mod pnpm;
 pub mod postgres;
 pub mod ripgrep;
 pub mod rust;
+pub mod sqlx_cli;
 pub mod starship;
 pub mod tableplus;
 pub mod xh;
@@ -38,6 +39,7 @@ pub enum Tool {
     Zoxide,
     Gh,
     CargoWatch,
+    SqlxCli,
 }
 
 impl Tool {
@@ -59,6 +61,7 @@ impl Tool {
         Tool::Zoxide,
         Tool::Gh,
         Tool::CargoWatch,
+        Tool::SqlxCli,
     ];
 
     /// Tools that must be installed before this one.
@@ -67,6 +70,7 @@ impl Tool {
             Tool::Paru       => &[Tool::Rust],
             Tool::TablePlus  => &[Tool::Yay],
             Tool::CargoWatch => &[Tool::Rust],
+            Tool::SqlxCli    => &[Tool::Rust],
             _               => &[],
         }
     }
@@ -91,6 +95,7 @@ impl Tool {
             Tool::Zoxide    => "zoxide",
             Tool::Gh        => "gh",
             Tool::CargoWatch => "cargo-watch",
+            Tool::SqlxCli   => "sqlx-cli",
         }
     }
 
@@ -125,6 +130,7 @@ impl Tool {
             Tool::Zoxide    => "zoxide      — smarter cd",
             Tool::Gh        => "gh          — GitHub CLI (browser device-flow login)",
             Tool::CargoWatch => "cargo-watch — watch & rerun cargo commands (needs rust)",
+            Tool::SqlxCli   => "sqlx-cli    — SQLx CLI for Postgres migrations (needs rust)",
         }
     }
 
@@ -146,6 +152,7 @@ impl Tool {
             Tool::Zoxide    => "zoxide",
             Tool::Gh        => "gh",
             Tool::CargoWatch => "cargo-watch",
+            Tool::SqlxCli   => "sqlx",
         }
     }
 
@@ -166,6 +173,7 @@ impl Tool {
             Tool::Xh       => &[".local/bin/xh", ".cargo/bin/xh"],
             Tool::Zoxide   => &[".local/bin/zoxide", ".cargo/bin/zoxide"],
             Tool::CargoWatch => &[".cargo/bin/cargo-watch"],
+            Tool::SqlxCli   => &[".cargo/bin/sqlx"],
             _              => return false,
         };
         fallbacks.iter().any(|p| home.join(p).exists())
@@ -194,6 +202,7 @@ impl Tool {
             Tool::Zoxide    => zoxide::install(),
             Tool::Gh        => gh::install(d),
             Tool::CargoWatch => cargo_watch::install(),
+            Tool::SqlxCli   => sqlx_cli::install(),
         }
     }
 

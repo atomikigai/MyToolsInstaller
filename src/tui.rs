@@ -1641,6 +1641,11 @@ fn tool_detail(tool: Tool) -> (&'static str, &'static str, Option<&'static str>)
             "Watches your Rust project and re-runs `cargo check`/`run`/`test` on file changes. Installed via `cargo install`.",
             Some("requires rust/cargo installed first"),
         ),
+        Tool::SqlxCli => (
+            "sqlx-cli — SQLx Command Line",
+            "CLI for managing SQLx database migrations and schema. Built with rustls + Postgres features, no native TLS dependency.",
+            Some("requires rust/cargo installed first"),
+        ),
     }
 }
 
